@@ -6,9 +6,8 @@
 	{
 		$topic_name=$_GET['topic_name'];
 		$content=$_GET['content'];
-		$inspect=$conn->prepare("SELECT id FROM topics WHERE topic_name=:topic_name AND content=:content");
+		$inspect=$conn->prepare("SELECT id FROM topics WHERE topic_name=:topic_name");
 		$inspect->bindParam(':topic_name',$topic_name);
-		$inspect->bindParam(':content',$content);
 		$inspect->execute();
 		$rows1=$inspect->fetchAll();
 		if(count($rows1)==0)
@@ -126,8 +125,7 @@
 			}
 		}
 	}
-	$query2="SELECT * FROM topics";
-	$stmt=$conn->prepare($query2);
+	$stmt=$conn->prepare("SELECT * FROM topics");
 	$stmt->execute();
 	$rows=$stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>

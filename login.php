@@ -11,7 +11,7 @@
 	<link href="https://fonts.googleapis.com/css?family=Varela+Round&display=swap" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital@1&display=swap" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
-	<script type="text/javascript">
+	<script>
 		var str1,str2;
 		function addtopic()
 		{
@@ -58,6 +58,17 @@
 			};
 			xmlhttp.open('GET','update.php?topic_name='+document.getElementById("topic_name").value+'&content='+document.getElementById("content").value,true);
 			xmlhttp.send();
+			document.getElementById("add_topic").style.display="none";
+			var a=document.createElement("option");
+			var text=document.createTextNode(document.getElementById("topic_name").value);
+			a.appendChild(text);
+			document.getElementById("topicname").appendChild(a);
+			a.value=document.getElementById("topic_name");
+			var a=document.createElement("option");
+			var text=document.createTextNode(document.getElementById("topic_name").value);
+			a.appendChild(text);
+			document.getElementById("name_topic").appendChild(a);
+			a.value=document.getElementById("name_topic");
 		}
 		function insert2()
 		{
@@ -72,6 +83,7 @@
 			};
 			xhttps.open('GET','update.php?topicname='+document.getElementById("topicname").value+'&changed_content='+document.getElementById("changed_content").value,true);
 			xhttps.send();
+			document.getElementById("edit_content").style.display="none";
 		}
 		function remove()
 		{
@@ -86,6 +98,19 @@
 			};
 			xhttps.open('GET','update.php?name_topic='+document.getElementById("name_topic").value,true);
 			xhttps.send();
+			document.getElementById("remove_topic").style.display="none";
+			var a=document.getElementById("topicname").getElementsByTagName("option");
+			for(i=0;i<a.length;i++)
+			{
+				if(a[i].value==document.getElementById("name_topic").value)
+					a[i].remove();
+			}
+			var a=document.getElementById("name_topic").getElementsByTagName("option");
+			for(i=0;i<a.length;i++)
+			{
+				if(a[i].value==document.getElementById("name_topic").value)
+					a[i].remove();
+			}
 		}
 		function like(userid,rowid)
 		{
@@ -130,7 +155,7 @@
 			<form>
 			<label for="topic_name">Topic Name: </label><input type="text" id="topic_name" name="topic_name" required><br><br>
 			Content: <br><textarea id="content" name="content" rows="10" cols="35" required></textarea><br><br>
-			<input type="submit" value="Add" class="add" onclick="insert1();">&nbsp;<div class="discard" onclick="discard1()">Discard</div></form>
+			<input type="button" value="Add" class="add" onclick="insert1();">&nbsp;<div class="discard" onclick="discard1()">Discard</div></form>
 		</div>
 	</div>
 	<div class="container">
@@ -146,7 +171,7 @@
 				?>
 			</select><br>
 			Content: <br><textarea id="changed_content" name="changed_content" rows="10" cols="35" required></textarea><br><br>
-			<input type="submit" value="Add" class="add" onclick="insert2();">&nbsp;<div class="discard" onclick="discard2()">Discard</div></form>
+			<input type="button" value="Add" class="add" onclick="insert2();">&nbsp;<div class="discard" onclick="discard2()">Discard</div></form>
 		</div>
 	</div>
 	<div class="container">
@@ -161,7 +186,7 @@
 					}
 				?>
 			</select><br><br>
-			<input type="submit" value="Remove" class="add" onclick="remove();">&nbsp;<div class="discard" onclick="discard3()">Discard</div></form>
+			<input type="button" value="Remove" class="add" onclick="remove();">&nbsp;<div class="discard" onclick="discard3()">Discard</div></form>
 		</div>
 	</div>
 	<div id="new_topic">
@@ -177,7 +202,7 @@
 			$query->bindParam(':rowid',$row['id']);
 			$query->execute();
 			$contents=$query->fetchAll(PDO::FETCH_ASSOC);
-			echo '<div class="topic">';
+			echo '<div class="topic '.$row['topic_name'].'">';
 				echo '<div class="topic_name">'.$row['topic_name'].'</div>';
 				echo '<div class="content">'.$row['content'].'</div>';
 				echo '<div class="changes">';
